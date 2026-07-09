@@ -9,7 +9,7 @@ import appointmentRoute from "./routes/appointmentRoute.js";
 import serviceAppointmentRoute from "./routes/serviceAppointmentRoute.js";
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
 
 const allowedOrigins = [ process.env.FRONTEND_URL, process.env.ADMIN_URL]
 
@@ -48,6 +48,10 @@ app.get('/', (req, res) => {
     res.send("API_WORKING");
 });
 
-app.listen(port, () => {
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => {
     console.log(`Server started on http://localhost:${port}`);
-});
+  });
+}
+
+export default app;
