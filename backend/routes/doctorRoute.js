@@ -4,7 +4,8 @@ import multer from "multer";
 import {createDoctor, deleteDoctor, doctorLogin, getDoctorById, getDoctors, toggleAvailability, updateDoctor} from "../controllers/DoctorController.js"
 import doctorAuth from "../middlewares/doctorAuth.js";
 
-const upload = multer({dest: "/temp"});
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 const doctorRoute = express.Router();
 
 doctorRoute.get("/", getDoctors);

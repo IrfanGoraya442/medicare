@@ -86,11 +86,12 @@ export async function createDoctor(req, res) {
 
         let imageUrl = body.imageUrl || null;
         let imagePublicId = body.imagePublicId || null;
-        if (req.file?.path) {
-            const uploaded = await uploadToCloudinary(req.file.path, "doctors");
-            imageUrl = uploaded?.secure_url || uploaded?.url || imageUrl;
-            imagePublicId = uploaded?.public_id || imagePublicId;
-        }
+       
+        if (req.file?.buffer) {
+    const uploaded = await uploadToCloudinary(req.file.buffer, "doctors");
+    imageUrl = uploaded?.secure_url || uploaded?.url || imageUrl;
+    imagePublicId = uploaded?.public_id || imagePublicId;
+}
 
         const schedule = parseScheduleInput(body.schedule);
          const doc = new Doctor({
@@ -265,17 +266,31 @@ export async function updateDoctor(req, res) {
     if (!existing) return res.status(404).json({ success: false, message: "Doctor not found" });
     
     //if exits then update the image else show a warning
-    if (req.file?.path) {
-      const uploaded = await uploadToCloudinary(req.file.path, "doctors");
-      if (uploaded) {
-        const previousPublicId = existing.imagePublicId;
-        existing.imageUrl = uploaded.secure_url || uploaded.url || existing.imageUrl;
-        existing.imagePublicId = uploaded.public_id || uploaded.publicId || existing.imagePublicId;
-        if (previousPublicId && previousPublicId !== existing.imagePublicId) {
-          deleteFromCloudinary(previousPublicId).catch((e) => console.warn("deleteFromCloudinary warning:", e?.message || e));
-        }
-      }
-    } else if (body.imageUrl) {
+  if (req.file?.buffer) {
+  const uploaded = await uploadToCloudinary(req.file.buffer, "doctors");
+
+  if (uploaded) {
+    const previousPublicId = existing.imagePublicId;
+
+    existing.imageUrl =
+      uploaded.secure_url || uploaded.url || existing.imageUrl;
+
+    existing.imagePublicId =
+      uploaded.public_id || uploaded.publicId || existing.imagePublicId;
+
+    if (
+      previousPublicId &&
+      previousPublicId !== existing.imagePublicId
+    ) {
+      deleteFromCloudinary(previousPublicId).catch((e) =>
+        console.warn(
+          "deleteFromCloudinary warning:",
+          e?.message || e
+        )
+      );
+    }
+  }
+} else if (body.imageUrl) {
       existing.imageUrl = body.imageUrl;
     }
 
