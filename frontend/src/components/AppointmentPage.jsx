@@ -516,7 +516,7 @@ const AppointmentPage = () => {
                             <div className={cardStyles.rescheduledText}>
                                 Reschedule to{" "}
                                 <span className={cardStyles.rescheduledSpan}>
-                                    {items.rescheduledTo.date} : {item.rescheduledTo.time}
+                                    {item.rescheduledTo.date} : {item.rescheduledTo.time}
                                 </span>
                             </div>
                         ): null}
