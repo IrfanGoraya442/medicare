@@ -3,7 +3,10 @@ import multer from 'multer';
 
 import { createService, deleteService, getServiceById, getServices, updateService } from '../controllers/serviceController.js';
 
-const upload = multer ({dest: "/temp"});
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 const serviceRoute = express.Router();
 
 serviceRoute.get("/", getServices);
